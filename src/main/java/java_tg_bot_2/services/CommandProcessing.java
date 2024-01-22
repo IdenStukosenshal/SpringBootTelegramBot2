@@ -1,9 +1,7 @@
 package java_tg_bot_2.services;
 
 import java_tg_bot_2.config.ConstAndComStorage;
-import java_tg_bot_2.services.commands.CommandIntrf;
-import java_tg_bot_2.services.commands.HelpComm;
-import java_tg_bot_2.services.commands.StartComm;
+import java_tg_bot_2.services.commands.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,7 +18,10 @@ public class CommandProcessing {
     public CommandProcessing() {
         this.commandDict = Map.of(
                 ConstAndComStorage.START, new StartComm(),
-                ConstAndComStorage.HELP, new HelpComm());
+                ConstAndComStorage.HELP, new HelpComm(),
+                ConstAndComStorage.ExchangeRate, new ExchangeRate(),
+                ConstAndComStorage.GetRandJoke, new GetRandomJoke()
+        );
     }
 
     //на каждую команду дать свой ответ

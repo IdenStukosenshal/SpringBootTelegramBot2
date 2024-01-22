@@ -6,9 +6,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -23,6 +30,8 @@ public class MainService extends TelegramLongPollingBot {
         this.botConfig = botConfig;
         this.commandProcessing = commandProcessing;
         this.callBackProcessing = callBackProcessing;
+
+        setCommandList();
     }
 
     @Override
@@ -61,6 +70,19 @@ public class MainService extends TelegramLongPollingBot {
             execute(msg);
         } catch (TelegramApiException ee) {
             log.error(ConstAndComStorage.ERROR_TEXT + ee.getMessage());
+        }
+    }
+
+    private void setCommandList(){
+        //меню списка команд, нельзя использовать верхний регистр
+        List<BotCommand> listCommands = new ArrayList<>(Arrays.asList(
+                new BotCommand(ConstAndComStorage.START, "Start working"),
+                new BotCommand(ConstAndComStorage.HELP, "stop it, get some help")
+        ));
+        try{
+            execute(new SetMyCommands(listCommands, new BotCommandScopeDefault(), null));
+        } catch (TelegramApiException ee){
+            log.error("Error creating bot's command list: " + ee.getMessage());
         }
     }
 }
