@@ -1,6 +1,7 @@
 package java_tg_bot_2.services;
 
 import java_tg_bot_2.config.BotConfig;
+import java_tg_bot_2.config.ConstAndComStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,14 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class MainService extends TelegramLongPollingBot {
 
     private final BotConfig botConfig;
+    private final CommandProcessing commandProcessing;
+    private final CallBackProcessing callBackProcessing;
 
     @Autowired
-    public MainService(BotConfig botConfig) {
+    public MainService(BotConfig botConfig, CallBackProcessing callBackProcessing, CommandProcessing commandProcessing) {
         this.botConfig = botConfig;
+        this.commandProcessing = commandProcessing;
+        this.callBackProcessing = callBackProcessing;
     }
 
     @Override
@@ -33,29 +38,29 @@ public class MainService extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        proverka(update);
-    }
-
-
-    private void proverka(Update update) {
         String messageText;
-        long chatId; //для взаимодействия с нужным чатом
+        long chatId;
 
         if (update.hasMessage() && update.getMessage().hasText()) {
             messageText = update.getMessage().getText();
             chatId = update.getMessage().getChatId();
-            if (messageText.equals("/start")) {
-                SendMessage message = new SendMessage(); //tg класс
-                message.setChatId(String.valueOf(chatId)); //принимает String
-                message.setText("ПРИВЕТ");
-                try {
-                    execute(message);
-                } catch (TelegramApiException ee) {
-                    log.error("Error occurred: " + ee.getMessage());
-                }
+            if (messageText.startsWith("/")) {
+                simpleSendMessage(commandProcessing.processing(update));
+            } else {
+                simpleSendMessage(new SendMessage(String.valueOf(chatId), ConstAndComStorage.UNKNOWN_COMMAND));
             }
+
+        } else if (update.hasCallbackQuery()) {
+            simpleSendMessage(callBackProcessing.processing(update));
         }
     }
 
-
+    //Простой метод отправки уже готовых сообщений
+    private void simpleSendMessage(SendMessage msg) {
+        try {
+            execute(msg);
+        } catch (TelegramApiException ee) {
+            log.error(ConstAndComStorage.ERROR_TEXT + ee.getMessage());
+        }
+    }
 }
