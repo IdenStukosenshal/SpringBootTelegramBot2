@@ -2,12 +2,14 @@ package java_tg_bot_2.config;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Getter //добавляет геттеры для всех полей
 @Configuration
 @EnableScheduling
+@EnableFeignClients(basePackages = "java_tg_bot_2.proxy")
 public class BotConfig {
 
     @Value("${bot.name}")

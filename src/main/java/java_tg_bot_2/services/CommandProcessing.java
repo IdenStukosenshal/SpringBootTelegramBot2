@@ -15,11 +15,11 @@ public class CommandProcessing {
 
     private final Map<String, CommandIntrf> commandDict;
 
-    public CommandProcessing() {
+    public CommandProcessing(@Autowired ExchangeRate exchangeRate) {
         this.commandDict = Map.of(
                 ConstAndComStorage.START, new StartComm(),
                 ConstAndComStorage.HELP, new HelpComm(),
-                ConstAndComStorage.ExchangeRate, new ExchangeRate(),
+                ConstAndComStorage.ExchangeRate, exchangeRate,
                 ConstAndComStorage.GetRandJoke, new GetRandomJoke()
         );
     }
