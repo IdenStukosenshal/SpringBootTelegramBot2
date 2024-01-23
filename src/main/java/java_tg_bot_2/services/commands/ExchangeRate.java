@@ -1,6 +1,5 @@
 package java_tg_bot_2.services.commands;
 
-
 import java_tg_bot_2.dto.CurrentAllPrices;
 import java_tg_bot_2.proxy.AllRateProxyIntrf;
 import java_tg_bot_2.proxy.ExchangeRateProxyIntrf;
@@ -47,4 +46,4 @@ public class ExchangeRate implements CommandIntrf {
         "currency": "USD"
     }
 }
- */
+*/
