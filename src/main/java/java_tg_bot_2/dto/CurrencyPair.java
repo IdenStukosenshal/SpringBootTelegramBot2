@@ -15,13 +15,14 @@ https://docs.cloud.coinbase.com/sign-in-with-coinbase/docs/api-prices
 }
  */
 public class CurrencyPair {
-    private Map<String, String> data;
-
-    public Map<String, String> getData() {
+    private Data data;
+    public Data getData() {
         return data;
     }
-
-    public void setData(Map<String, String> data) {
+    public void setData(Data data) {
         this.data = data;
+    }
+
+    public record Data(String base, String currency, String amount) {
     }
 }

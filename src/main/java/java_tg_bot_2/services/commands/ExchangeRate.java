@@ -25,16 +25,17 @@ public class ExchangeRate implements CommandIntrf {
     public SendMessage respond(Update update) {
         long chatId = update.getMessage().getChatId();
 
-        var dataMap = exchangeRateProxyIntrf.getCurrencyPair().getData();
-        String amount = dataMap.get("amount");
-        String base = dataMap.get("base");
-        String currency = dataMap.get("currency");
+        var dataObj_1 = exchangeRateProxyIntrf.getCurrencyPair();
+        String amount = dataObj_1.getData().amount();
+        String base = dataObj_1.getData().base();
+        String currency = dataObj_1.getData().currency();
 
         String response1 = base + "/" + currency + " : " + amount;
 
-        CurrentAllPrices.Data data2 = allRateProxyIntrf.getAllPrices("BTC").getData();
-        String amount2 = data2.getRates().get("USD");
-        String response2 = "BTC" + "/" + "USD" + ": " + amount2;
+        var dataObj_2 = allRateProxyIntrf.getAllPrices("BTC").getData();
+        String amount2 = dataObj_2.rates().get("USD");
+        String currency2 = dataObj_2.currency();
+        String response2 = currency2 + "/" + "USD" + ": " + amount2;
 
         return new SendMessage(String.valueOf(chatId), response1 + "\n" + response2);
 
@@ -49,3 +50,17 @@ public class ExchangeRate implements CommandIntrf {
     }
 }
 */
+/*
+{
+    "data": {
+        "currency": "BTC",
+        "rates": {
+            "00": "575336.7571533382241308",
+            ...
+            ...
+            "USD": "39209.2",
+            "USDC": "39209.2"
+        }
+    }
+}
+ */

@@ -29,24 +29,5 @@ public class CurrentAllPrices {
         this.data = data;
     }
 
-    public static class Data {
-
-        private String currency;
-        private Map<String, String> rates;
-
-
-        public String getCurrency() {
-            return currency;
-        }
-        public void setCurrency(String currency) {
-            this.currency = currency;
-        }
-
-        public Map<String, String> getRates() {
-            return rates;
-        }
-        public void setRates(Map<String, String> rates) {
-            this.rates = rates;
-        }
-    }
+    public record Data(String currency, Map<String, String> rates) {}
 }
