@@ -25,9 +25,11 @@ public class ExchangeRate implements CommandIntrf {
     public SendMessage respond(Update update) {
         long chatId = update.getMessage().getChatId();
 
-        String amount = exchangeRateProxyIntrf.getCurrencyPair().getData().get("amount");
-        String base = exchangeRateProxyIntrf.getCurrencyPair().getData().get("base");
-        String currency = exchangeRateProxyIntrf.getCurrencyPair().getData().get("currency");
+        var dataMap = exchangeRateProxyIntrf.getCurrencyPair().getData();
+        String amount = dataMap.get("amount");
+        String base = dataMap.get("base");
+        String currency = dataMap.get("currency");
+
         String response1 = base + "/" + currency + " : " + amount;
 
         CurrentAllPrices.Data data2 = allRateProxyIntrf.getAllPrices("BTC").getData();

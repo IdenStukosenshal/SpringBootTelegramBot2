@@ -17,10 +17,10 @@ public class CommandProcessing {
 
     public CommandProcessing(@Autowired ExchangeRate exchangeRate) {
         this.commandDict = Map.of(
-                ConstAndComStorage.START, new StartComm(),
-                ConstAndComStorage.HELP, new HelpComm(),
-                ConstAndComStorage.ExchangeRate, exchangeRate,
-                ConstAndComStorage.GetRandJoke, new GetRandomJoke()
+                ConstAndComStorage.START.getText(), new StartComm(),
+                ConstAndComStorage.HELP.getText(), new HelpComm(),
+                ConstAndComStorage.ExchangeRate.getText(), exchangeRate,
+                ConstAndComStorage.GetRandJoke.getText(), new GetRandomJoke()
         );
     }
 
@@ -32,6 +32,6 @@ public class CommandProcessing {
 
         CommandIntrf commandIntrf = commandDict.get(msgCommand); //объект, обрабатывающий команду
         if (commandIntrf != null) return commandIntrf.respond(update); //вызвать метод обработки команды
-        else return new SendMessage(String.valueOf(chatId), ConstAndComStorage.UNKNOWN_COMMAND);
+        else return new SendMessage(String.valueOf(chatId), ConstAndComStorage.UNKNOWN_COMMAND.getText());
     }
 }

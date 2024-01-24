@@ -56,7 +56,7 @@ public class MainService extends TelegramLongPollingBot {
             if (messageText.startsWith("/")) {
                 simpleSendMessage(commandProcessing.processing(update));
             } else {
-                simpleSendMessage(new SendMessage(String.valueOf(chatId), ConstAndComStorage.UNKNOWN_COMMAND));
+                simpleSendMessage(new SendMessage(String.valueOf(chatId), ConstAndComStorage.UNKNOWN_COMMAND.getText()));
             }
 
         } else if (update.hasCallbackQuery()) {
@@ -76,8 +76,8 @@ public class MainService extends TelegramLongPollingBot {
     private void setCommandList(){
         //меню списка команд, нельзя использовать верхний регистр
         List<BotCommand> listCommands = new ArrayList<>(Arrays.asList(
-                new BotCommand(ConstAndComStorage.START, "Start working"),
-                new BotCommand(ConstAndComStorage.HELP, "stop it, get some help")
+                new BotCommand(ConstAndComStorage.START.getText(), "Start working"),
+                new BotCommand(ConstAndComStorage.HELP.getText(), "stop it, get some help")
         ));
         try{
             execute(new SetMyCommands(listCommands, new BotCommandScopeDefault(), null));

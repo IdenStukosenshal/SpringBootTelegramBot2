@@ -10,5 +10,5 @@ public interface ExchangeRateProxyIntrf {
     @GetMapping("/BTC-USD/buy")
     CurrencyPair getCurrencyPair();
     // Запрос выглядит так: https://api.coinbase.com/v2/prices/BTC-USD/buy
-    //Недостаток в том, что нельзя указать пару в параметре запроса
+    //Недостаток в том, что НЕИЗВЕСТНО КАК указать пару в параметре запроса
 }

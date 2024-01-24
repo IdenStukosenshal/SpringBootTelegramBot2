@@ -14,7 +14,7 @@ public class StartComm implements CommandIntrf {
     @Override
     public SendMessage respond(Update update) {
         long chatId = update.getMessage().getChatId();
-        SendMessage msg = new SendMessage(String.valueOf(chatId), ConstAndComStorage.START_TXT);
+        SendMessage msg = new SendMessage(String.valueOf(chatId), ConstAndComStorage.START_TXT.getText());
         msg.setReplyMarkup(addKeyboardToMsg()); //добавление клавиатуры
         return msg;
     }
@@ -24,15 +24,9 @@ public class StartComm implements CommandIntrf {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
 
         KeyboardRow row1 = new KeyboardRow();
-        for (String b : ConstAndComStorage.BUTTONS_ROW1) {
-            row1.add(b);
+        for (ConstAndComStorage b : ConstAndComStorage.BUTTONS_ROW1) {
+            row1.add(b.getText());
         }
-        /*
-        KeyboardRow row2 = new KeyboardRow();
-        for(String b: ConstAndComStorage.BUTTONS_ROW2){
-            row2.add(b);
-        }
-         */
         List<KeyboardRow> kRows = new ArrayList<>(List.of(row1));
 
         keyboardMarkup.setKeyboard(kRows);

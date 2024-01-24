@@ -8,6 +8,6 @@ public class HelpComm implements CommandIntrf{
     @Override
     public SendMessage respond(Update update) {
         long chatId = update.getMessage().getChatId();
-        return new SendMessage(String.valueOf(chatId), ConstAndComStorage.HELP_TXT);
+        return new SendMessage(String.valueOf(chatId), ConstAndComStorage.HELP_TXT.getText());
     }
 }
