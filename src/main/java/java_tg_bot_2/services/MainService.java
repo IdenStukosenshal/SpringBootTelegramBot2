@@ -1,7 +1,8 @@
 package java_tg_bot_2.services;
 
 import java_tg_bot_2.config.BotConfig;
-import java_tg_bot_2.config.ConstAndComStorage;
+import java_tg_bot_2.config.CommandsStorage;
+import java_tg_bot_2.config.ConstantsStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,7 @@ public class MainService extends TelegramLongPollingBot {
             if (messageText.startsWith("/")) {
                 simpleSendMessage(commandProcessing.processing(update));
             } else {
-                simpleSendMessage(new SendMessage(String.valueOf(chatId), ConstAndComStorage.UNKNOWN_COMMAND.getText()));
+                simpleSendMessage(new SendMessage(String.valueOf(chatId), ConstantsStorage.UNKNOWN_COM_TXT.getText()));
             }
 
         } else if (update.hasCallbackQuery()) {
@@ -69,15 +70,15 @@ public class MainService extends TelegramLongPollingBot {
         try {
             execute(msg);
         } catch (TelegramApiException ee) {
-            log.error(ConstAndComStorage.ERROR_TEXT + ee.getMessage());
+            log.error(ConstantsStorage.ERROR_TEXT.getText() + ee.getMessage());
         }
     }
 
     private void setCommandList(){
         //меню списка команд, нельзя использовать верхний регистр
         List<BotCommand> listCommands = new ArrayList<>(Arrays.asList(
-                new BotCommand(ConstAndComStorage.START.getText(), "Start working"),
-                new BotCommand(ConstAndComStorage.HELP.getText(), "stop it, get some help")
+                new BotCommand(CommandsStorage.START.getText(), "Start working"),
+                new BotCommand(CommandsStorage.HELP.getText(), "stop it, get some help")
         ));
         try{
             execute(new SetMyCommands(listCommands, new BotCommandScopeDefault(), null));

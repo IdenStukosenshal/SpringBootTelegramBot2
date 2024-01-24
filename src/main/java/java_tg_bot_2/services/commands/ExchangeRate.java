@@ -1,5 +1,6 @@
 package java_tg_bot_2.services.commands;
 
+import java_tg_bot_2.config.CommandsStorage;
 import java_tg_bot_2.dto.CurrentAllPrices;
 import java_tg_bot_2.proxy.AllRateProxyIntrf;
 import java_tg_bot_2.proxy.ExchangeRateProxyIntrf;
@@ -25,20 +26,25 @@ public class ExchangeRate implements CommandIntrf {
     public SendMessage respond(Update update) {
         long chatId = update.getMessage().getChatId();
 
-        var dataObj_1 = exchangeRateProxyIntrf.getCurrencyPair();
+        var dataObj_1 = exchangeRateProxyIntrf.getCurrencyPair("BTC", "USD", "buy");
         String amount = dataObj_1.getData().amount();
         String base = dataObj_1.getData().base();
         String currency = dataObj_1.getData().currency();
+        String response1 = "buy: " + base + "/" + currency + " : " + amount;
 
-        String response1 = base + "/" + currency + " : " + amount;
+        var dataObj_1_5 = exchangeRateProxyIntrf.getCurrencyPair("BTC", "USD", "sell");
+        String response1_5 = "sell: " + dataObj_1_5.getData().base() + "/" + dataObj_1_5.getData().currency() + " : " + dataObj_1_5.getData().amount();
 
         var dataObj_2 = allRateProxyIntrf.getAllPrices("BTC").getData();
         String amount2 = dataObj_2.rates().get("USD");
         String currency2 = dataObj_2.currency();
         String response2 = currency2 + "/" + "USD" + ": " + amount2;
 
-        return new SendMessage(String.valueOf(chatId), response1 + "\n" + response2);
+        return new SendMessage(String.valueOf(chatId), response1 + "\n" + response1_5 + "\n" + response2);
 
+    }
+    public String getCommandName(){
+        return CommandsStorage.ExchangeRate.getText();
     }
 }
 /*
