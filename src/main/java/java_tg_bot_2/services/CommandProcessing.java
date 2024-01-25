@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -19,21 +20,20 @@ public class CommandProcessing {
 
     private final Map<String, CommandIntrf> commandDict;
 
-    public CommandProcessing(@Autowired ExchangeRate exchangeRate) {
-        this.commandDict = Map.of(
-                CommandsStorage.START.getText(), new StartComm(),
-                CommandsStorage.HELP.getText(), new HelpComm(),
-                CommandsStorage.ExchangeRate.getText(), exchangeRate,
-                CommandsStorage.GetRandJoke.getText(), new GetRandomJoke()
-        );
-    }
-
-/*  Инопланетные технологии, каждый класс команд нужно сделать бином, тогда это будет работать
+/*  Версия с использованием Stream  API
     public CommandProcessing(List<CommandIntrf> commands) {
         this.commandDict = commands.stream().collect(Collectors.toMap(CommandIntrf::getCommandName, Function.identity()));
     }
-
  */
+    //автоматическое добавление классов, которые реализуют этот интерфейс,
+    //Но каждая команда(класс) должна быть бином
+    public CommandProcessing(List<CommandIntrf> commandsObj){
+        Map<String, CommandIntrf> tmpDict = new HashMap<>();
+        for(CommandIntrf commObj: commandsObj){
+            tmpDict.put(commObj.getCommandName(), commObj);
+        }
+        this.commandDict = tmpDict;
+    }
 
 
     //на каждую команду дать свой ответ
