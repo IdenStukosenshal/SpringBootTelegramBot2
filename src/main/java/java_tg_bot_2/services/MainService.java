@@ -3,8 +3,11 @@ package java_tg_bot_2.services;
 import java_tg_bot_2.config.BotConfig;
 import java_tg_bot_2.config.CommandsStorage;
 import java_tg_bot_2.config.ConstantsStorage;
+import java_tg_bot_2.models.ReminderMessage;
+import java_tg_bot_2.repositories.ReminderMsgRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
@@ -14,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,12 +29,14 @@ public class MainService extends TelegramLongPollingBot {
     private final BotConfig botConfig;
     private final CommandProcessing commandProcessing;
     private final CallBackProcessing callBackProcessing;
+    private final ReminderMsgRepo reminderMsgRepo;
 
     @Autowired
-    public MainService(BotConfig botConfig, CallBackProcessing callBackProcessing, CommandProcessing commandProcessing) {
+    public MainService(BotConfig botConfig, CallBackProcessing callBackProcessing, CommandProcessing commandProcessing, ReminderMsgRepo reminderMsgRepo) {
         this.botConfig = botConfig;
         this.commandProcessing = commandProcessing;
         this.callBackProcessing = callBackProcessing;
+        this.reminderMsgRepo = reminderMsgRepo;
 
         setCommandList();
     }
@@ -66,7 +72,7 @@ public class MainService extends TelegramLongPollingBot {
     }
 
     //Простой метод отправки уже готовых сообщений
-    private void simpleSendMessage(SendMessage msg) {
+    public void simpleSendMessage(SendMessage msg) {
         try {
             execute(msg);
         } catch (TelegramApiException ee) {
@@ -74,16 +80,51 @@ public class MainService extends TelegramLongPollingBot {
         }
     }
 
-    private void setCommandList(){
+    /*Метод осуществляет проверку списка сообщений через некоторый промежуток времени.
+Если подошло время отправить - он это делает
+    Если список будет очень большим всё перестанет работать
+ */
+    @Scheduled(cron = "0 * * * * *") // 0 *...* каждую минуту
+    //секунды, минуты, часы, дата(номер дня), месяц, день недели
+    //* любое значение, 6 звёзд: каждую секунду, 0 0 *...: каждый час в 00:00
+    private void checkToSend() {
+        Iterable<ReminderMessage> allMsgList = reminderMsgRepo.findAll();
+        LocalDateTime ldatetimeNow = LocalDateTime.now();
+        int year = ldatetimeNow.getYear();
+        int month = ldatetimeNow.getMonth().getValue();
+        int day = ldatetimeNow.getDayOfMonth();
+        int hour = ldatetimeNow.getHour();
+        int minute = ldatetimeNow.getMinute();
+
+        for (ReminderMessage savedMsg : allMsgList) {
+            LocalDateTime ldatetimeSaved = savedMsg.getTimeToRemind();
+            int savedyear = ldatetimeSaved.getYear();
+            int savedmonth = ldatetimeSaved.getMonth().getValue();
+            int savedday = ldatetimeSaved.getDayOfMonth();
+            int savedhour = ldatetimeSaved.getHour();
+            int savedminute = ldatetimeSaved.getMinute(); //Сообщение отправится примерно за 2 минуты до
+            if (year == savedyear && month == savedmonth && day == savedday && hour == savedhour && (savedminute - minute <= 2)) {
+                SendMessage message = new SendMessage();
+                message.setChatId(savedMsg.getUserId());
+                message.setText(savedMsg.getText());
+                simpleSendMessage(message); //отправка сообщения
+                reminderMsgRepo.deleteById(savedMsg.getId()); //удаление сообщения из БД
+            }
+        }
+    }
+
+    private void setCommandList() {
         //меню списка команд, нельзя использовать верхний регистр
         List<BotCommand> listCommands = new ArrayList<>(Arrays.asList(
                 new BotCommand(CommandsStorage.START.getText(), "Start working"),
                 new BotCommand(CommandsStorage.HELP.getText(), "stop it, get some help")
         ));
-        try{
+        try {
             execute(new SetMyCommands(listCommands, new BotCommandScopeDefault(), null));
-        } catch (TelegramApiException ee){
+        } catch (TelegramApiException ee) {
             log.error("Error creating bot's command list: " + ee.getMessage());
         }
     }
+
+
 }
