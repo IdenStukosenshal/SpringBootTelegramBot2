@@ -58,8 +58,7 @@ public class RemindMe implements CommandIntrf {
                 .plusHours(deltaTimeMap.get(hour))
                 .plusMinutes(deltaTimeMap.get(minute));
 
-        String reminderText = "text:\n" + messageText.substring(messageText.indexOf(")") + 1) + "\n"
-                + "has been saved: " + "\n" + ldatetimeNow;
+        String reminderText = "text:\n" + messageText.substring(messageText.indexOf(")") + 1) + "\n";
 
         ReminderMessage reminderMessage = new ReminderMessage(null, userId, reminderText, futureTime, ldatetimeNow);
         reminderMsgRepo.save(reminderMessage);//Сохранить в БД

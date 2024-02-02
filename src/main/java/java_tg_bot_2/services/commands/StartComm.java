@@ -12,7 +12,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -49,20 +48,19 @@ public class StartComm implements CommandIntrf {
     }
 
     @Override
-    public String getCommandName(){
+    public String getCommandName() {
         return CommandsStorage.START.getText();
     }
 
     //Создание записи в таблице для пользователя, если её нет
-    private void registerUser(Update update){
+    private void registerUser(Update update) {
         var message = update.getMessage();
         Long chatId = message.getChatId();
-        if(!userRepo.existsById(chatId)){ //если записи не существует
+        if (!userRepo.existsById(chatId)) { //если записи не существует
             String firstname = message.getChat().getFirstName();
             String username = message.getChat().getUserName();
             UserT userT = new UserT(chatId, firstname, username, LocalDateTime.now());
             userRepo.save(userT);
-            System.out.println("----------------REGISTERED---------------------------");
         }
     }
 }
