@@ -100,7 +100,7 @@ public class MainService extends TelegramLongPollingBot {
                     && (ldatetimeSAVed.getMinute() - ldatetimeNow.getMinute() <= 2)) { //Сообщение отправится примерно за 2 минуты до
                 SendMessage message = new SendMessage();
                 message.setChatId(savedMsg.getUserId());
-                message.setText(savedMsg.getText());
+                message.setText(savedMsg.getText() + "\nhas been saved: " + "\n" + savedMsg.getCreatedAt());
                 simpleSendMessage(message); //отправка сообщения
                 reminderMsgRepo.deleteById(savedMsg.getId()); //удаление сообщения из БД
             }
@@ -111,6 +111,7 @@ public class MainService extends TelegramLongPollingBot {
         //меню списка команд, нельзя использовать верхний регистр
         List<BotCommand> listCommands = new ArrayList<>(Arrays.asList(
                 new BotCommand(CommandsStorage.START.getText(), "Start working"),
+                new BotCommand(CommandsStorage.DELETE_LAST_REMINDER.getText(), "delete last reminder_me message"),
                 new BotCommand(CommandsStorage.HELP.getText(), "stop it, get some help")
         ));
         try {
