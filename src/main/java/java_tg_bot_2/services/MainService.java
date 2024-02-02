@@ -82,7 +82,7 @@ public class MainService extends TelegramLongPollingBot {
 
     /*Метод осуществляет проверку списка сообщений через некоторый промежуток времени.
 Если подошло время отправить - он это делает
-    Если список будет очень большим всё перестанет работать
+    Если список будет очень большим ВОЗМОЖНО всё перестанет работать
  */
     @Scheduled(cron = "0 * * * * *") // 0 *...* каждую минуту
     //секунды, минуты, часы, дата(номер дня), месяц, день недели
@@ -90,20 +90,14 @@ public class MainService extends TelegramLongPollingBot {
     private void checkToSend() {
         Iterable<ReminderMessage> allMsgList = reminderMsgRepo.findAll();
         LocalDateTime ldatetimeNow = LocalDateTime.now();
-        int year = ldatetimeNow.getYear();
-        int month = ldatetimeNow.getMonth().getValue();
-        int day = ldatetimeNow.getDayOfMonth();
-        int hour = ldatetimeNow.getHour();
-        int minute = ldatetimeNow.getMinute();
 
         for (ReminderMessage savedMsg : allMsgList) {
-            LocalDateTime ldatetimeSaved = savedMsg.getTimeToRemind();
-            int savedyear = ldatetimeSaved.getYear();
-            int savedmonth = ldatetimeSaved.getMonth().getValue();
-            int savedday = ldatetimeSaved.getDayOfMonth();
-            int savedhour = ldatetimeSaved.getHour();
-            int savedminute = ldatetimeSaved.getMinute(); //Сообщение отправится примерно за 2 минуты до
-            if (year == savedyear && month == savedmonth && day == savedday && hour == savedhour && (savedminute - minute <= 2)) {
+            LocalDateTime ldatetimeSAVed = savedMsg.getTimeToRemind();
+            if (ldatetimeNow.getYear() == ldatetimeSAVed.getYear()
+                    && ldatetimeNow.getMonth().getValue() == ldatetimeSAVed.getMonth().getValue()
+                    && ldatetimeNow.getDayOfMonth() == ldatetimeSAVed.getDayOfMonth()
+                    && ldatetimeNow.getHour() == ldatetimeSAVed.getHour()
+                    && (ldatetimeSAVed.getMinute() - ldatetimeNow.getMinute() <= 2)) { //Сообщение отправится примерно за 2 минуты до
                 SendMessage message = new SendMessage();
                 message.setChatId(savedMsg.getUserId());
                 message.setText(savedMsg.getText());
