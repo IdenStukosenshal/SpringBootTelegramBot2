@@ -17,5 +17,6 @@ public interface ReminderMsgRepo extends CrudRepository<ReminderMessage, Long> {
     JPQL
     @Query("SELECT r FROM ReminderMessage r WHERE r.userId = :userId ORDER BY r.createdAt DESC")
     Optional<ReminderMessage> findLastByUserId(@Param("userId") Long userId);
+
      */
 }
