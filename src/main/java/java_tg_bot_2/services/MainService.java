@@ -17,6 +17,7 @@ import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +34,7 @@ public class MainService extends TelegramLongPollingBot {
 
     @Autowired
     public MainService(BotConfig botConfig, CallBackProcessing callBackProcessing, CommandProcessing commandProcessing, ReminderMsgRepo reminderMsgRepo) {
+        super(botConfig.getToken());
         this.botConfig = botConfig;
         this.commandProcessing = commandProcessing;
         this.callBackProcessing = callBackProcessing;
@@ -44,12 +46,6 @@ public class MainService extends TelegramLongPollingBot {
     @Override
     public String getBotUsername() {
         return botConfig.getBotName();
-    }
-
-    //deprecated method, но без него не работает
-    @Override
-    public String getBotToken() {
-        return botConfig.getToken();
     }
 
     @Override
@@ -93,11 +89,9 @@ public class MainService extends TelegramLongPollingBot {
 
         for (ReminderMessage savedMsg : allMsgList) {
             LocalDateTime ldatetimeSAVed = savedMsg.getTimeToRemind();
-            if (ldatetimeNow.getYear() == ldatetimeSAVed.getYear()
-                    && ldatetimeNow.getMonth().getValue() == ldatetimeSAVed.getMonth().getValue()
-                    && ldatetimeNow.getDayOfMonth() == ldatetimeSAVed.getDayOfMonth()
-                    && ldatetimeNow.getHour() == ldatetimeSAVed.getHour()
-                    && (ldatetimeSAVed.getMinute() - ldatetimeNow.getMinute() <= 2)) { //Сообщение отправится примерно за 2 минуты до
+            //Класс Duration для хранения длительности, промежутка
+            //https://stackoverflow.com/questions/24491243/why-cant-i-get-a-duration-in-minutes-or-hours-in-java-time
+            if (Duration.between(ldatetimeNow, ldatetimeSAVed).toMinutesPart() <= 2) { //Сообщение отправится примерно за 2 минуты до
                 SendMessage message = new SendMessage();
                 message.setChatId(savedMsg.getUserId());
                 message.setText(savedMsg.getText() + "\nhas been saved: " + "\n" + savedMsg.getCreatedAt());

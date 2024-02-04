@@ -26,8 +26,8 @@ public class ExchangeRate implements CommandIntrf {
         return choiceValMessage;
     }
 
-    public String getCommandName() {
-        return CommandsStorage.ExchangeRate.getText();
+    public CommandsStorage getCommandName() {
+        return CommandsStorage.EXCHANGE_RATES;
     }
 
 

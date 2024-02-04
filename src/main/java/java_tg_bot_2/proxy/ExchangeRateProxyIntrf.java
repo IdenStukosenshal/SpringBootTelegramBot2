@@ -11,10 +11,10 @@ public interface ExchangeRateProxyIntrf {
 
     // Запрос выглядит так: https://api.coinbase.com/v2/prices/BTC-USD/buy
     //                      https://api.coinbase.com/v2/prices/BTC-USD/sell
-    @GetMapping("/{base}-{currency}/{buy_Or_sell}")
+    @GetMapping("/{base}-{currency}/{buyOrSell}")
     CurrencyPair getCurrencyPair(@PathVariable(value = "base") String base,
                                  @PathVariable(value = "currency") String currency,
-                                 @PathVariable(value = "buy_Or_sell") String buy_Or_sell);
+                                 @PathVariable(value = "buyOrSell") String buyOrSell);
 
 }
 

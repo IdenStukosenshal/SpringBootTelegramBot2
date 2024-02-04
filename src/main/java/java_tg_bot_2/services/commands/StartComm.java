@@ -48,8 +48,8 @@ public class StartComm implements CommandIntrf {
     }
 
     @Override
-    public String getCommandName() {
-        return CommandsStorage.START.getText();
+    public CommandsStorage getCommandName() {
+        return CommandsStorage.START;
     }
 
     //Создание записи в таблице для пользователя, если её нет

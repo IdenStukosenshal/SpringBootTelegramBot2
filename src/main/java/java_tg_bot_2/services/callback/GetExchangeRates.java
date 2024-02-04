@@ -25,16 +25,16 @@ public class GetExchangeRates {
 
         long chatId = update.getCallbackQuery().getMessage().getChatId();
 
-        var dataObj_1 = exchangeRateProxyIntrf.getCurrencyPair(baseCoinCode, toCoinCode, "buy");
-        String amount = dataObj_1.getData().amount();
+        var currencyPairBuy = exchangeRateProxyIntrf.getCurrencyPair(baseCoinCode, toCoinCode, "buy");
+        String amount = currencyPairBuy.getData().amount();
         String response1 = "buy: " + baseCoinCode + "/" + toCoinCode + " : " + amount;
 
-        var dataObj_1_5 = exchangeRateProxyIntrf.getCurrencyPair(baseCoinCode, toCoinCode, "sell");
-        String amount_1_5 = dataObj_1_5.getData().amount();
+        var currencyPairSell = exchangeRateProxyIntrf.getCurrencyPair(baseCoinCode, toCoinCode, "sell");
+        String amount_1_5 = currencyPairSell.getData().amount();
         String response1_5 = "sell: " + baseCoinCode + "/" + toCoinCode + " : " + amount_1_5;
 
-        var dataObj_2 = allRateProxyIntrf.getAllPrices(baseCoinCode).getData();
-        String amount2 = dataObj_2.rates().get(toCoinCode);
+        var allPricesVal = allRateProxyIntrf.getAllPrices(baseCoinCode).getData();
+        String amount2 = allPricesVal.rates().get(toCoinCode);
         String response2 = baseCoinCode + "/" + toCoinCode + ": " + amount2;
 
         return new SendMessage(String.valueOf(chatId), response1 + "\n" + response1_5 + "\n" + response2);
@@ -55,7 +55,7 @@ public class GetExchangeRates {
         "rates": {
             "00": "575336.7571533382241308",
             ...
-            450 штук
+            450 строк
             ...
             "USD": "39209.2",
             "USDC": "39209.2"

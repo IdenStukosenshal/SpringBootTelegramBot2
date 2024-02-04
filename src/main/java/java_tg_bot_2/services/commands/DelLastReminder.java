@@ -30,7 +30,7 @@ public class DelLastReminder implements CommandIntrf {
     }
 
     @Override
-    public String getCommandName() {
-        return CommandsStorage.DELETE_LAST_REMINDER.getText();
+    public CommandsStorage getCommandName() {
+        return CommandsStorage.DELETE_LAST_REMINDER;
     }
 }

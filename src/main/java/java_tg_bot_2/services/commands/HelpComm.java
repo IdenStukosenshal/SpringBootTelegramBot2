@@ -14,7 +14,7 @@ public class HelpComm implements CommandIntrf{
         return new SendMessage(String.valueOf(chatId), ConstantsStorage.HELP_TXT.getText());
     }
     @Override
-    public String getCommandName(){
-        return CommandsStorage.HELP.getText();
+    public CommandsStorage getCommandName(){
+        return CommandsStorage.HELP;
     }
 }

@@ -1,7 +1,10 @@
 package java_tg_bot_2.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum CommandsStorage {
-    START("/start"), HELP("/help"), RemindMe("/remind_me"), ExchangeRate("/exchange_rates"),
+    START("/start"), HELP("/help"), REMIND_ME("/remind_me"), EXCHANGE_RATES("/exchange_rates"),
     DELETE_LAST_REMINDER("/delete_last_reminder");
     private final String text;
 
@@ -13,5 +16,5 @@ public enum CommandsStorage {
         return text;
     }
 
-    public static final CommandsStorage[] BUTTONS_ROW1 = {ExchangeRate, RemindMe};
+    public static final List<CommandsStorage> BUTTONS_ROW1 = new ArrayList<>(List.of(EXCHANGE_RATES, REMIND_ME));
 }

@@ -17,7 +17,7 @@ public class CommandProcessing {
 
     /*  Версия с использованием Stream  API
         public CommandProcessing(List<CommandIntrf> commands) {
-            this.commandDict = commands.stream().collect(Collectors.toMap(CommandIntrf::getCommandName, Function.identity()));
+            this.commandDict = commands.stream().collect(Collectors.toMap(CommandIntrf::getCommandName.getText(), Function.identity()));
         }
      */
     //автоматическое добавление классов, которые реализуют этот интерфейс,
@@ -25,7 +25,7 @@ public class CommandProcessing {
     public CommandProcessing(List<CommandIntrf> commandsObj) {
         Map<String, CommandIntrf> tmpDict = new HashMap<>();
         for (CommandIntrf commObj : commandsObj) {
-            tmpDict.put(commObj.getCommandName(), commObj);
+            tmpDict.put(commObj.getCommandName().getText(), commObj);
         }
         this.commandDict = tmpDict;
     }

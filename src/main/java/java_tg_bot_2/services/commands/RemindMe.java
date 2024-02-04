@@ -17,6 +17,9 @@ public class RemindMe implements CommandIntrf {
 
     private final ReminderMsgRepo reminderMsgRepo;
 
+    private final String year = "y", month = "m", day = "d", hour = "h", minute = "min";
+    private final String[] responseLitersTimes = {year, month, day, hour, minute};
+
     public RemindMe(ReminderMsgRepo reminderMsgRepo) {
         this.reminderMsgRepo = reminderMsgRepo;
     }
@@ -26,9 +29,9 @@ public class RemindMe implements CommandIntrf {
         long chatId = update.getMessage().getChatId();
         String messageText = update.getMessage().getText();
 
-        if (messageText.equals(CommandsStorage.RemindMe.getText())) {
+        if (messageText.equals(CommandsStorage.REMIND_ME.getText())) {
             return new SendMessage(String.valueOf(chatId), ConstantsStorage.REMIND_ME_TXT.getText());
-        } else if (messageText.startsWith(CommandsStorage.RemindMe.getText())) {
+        } else if (messageText.startsWith(CommandsStorage.REMIND_ME.getText())) {
             String statusText = saveRemindMessage(update);
             return new SendMessage(String.valueOf(chatId), statusText);
         }
@@ -36,15 +39,12 @@ public class RemindMe implements CommandIntrf {
     }
 
     @Override
-    public String getCommandName() {
-        return CommandsStorage.RemindMe.getText();
+    public CommandsStorage getCommandName() {
+        return CommandsStorage.REMIND_ME;
     }
 
     private String saveRemindMessage(Update update) {
-        // формат будет такой например "/Remind_Me (1y 1m 1d 3h 1min) text text text"
-        //Если год, месяц и тд не нужны их не указывают
-        //например "/Remind_Me (2h 1min) text" - через 2 часа 1 минуту
-        String year = "y", month = "m", day = "d", hour = "h", minute = "min";
+
 
         Long userId = update.getMessage().getChatId();
         String messageText = update.getMessage().getText();
@@ -52,11 +52,11 @@ public class RemindMe implements CommandIntrf {
 
         LocalDateTime ldatetimeNow = LocalDateTime.now();
         LocalDateTime futureTime = ldatetimeNow
-                .plusYears(deltaTimeMap.get(year))
-                .plusMonths(deltaTimeMap.get(month))
-                .plusDays(deltaTimeMap.get(day))
-                .plusHours(deltaTimeMap.get(hour))
-                .plusMinutes(deltaTimeMap.get(minute));
+                .plusYears(deltaTimeMap.getOrDefault(year, 0))
+                .plusMonths(deltaTimeMap.getOrDefault(month, 0))
+                .plusDays(deltaTimeMap.getOrDefault(day, 0))
+                .plusHours(deltaTimeMap.getOrDefault(hour, 0))
+                .plusMinutes(deltaTimeMap.getOrDefault(minute, 0));
 
         String reminderText = "text:\n" + messageText.substring(messageText.indexOf(")") + 1) + "\n";
 
@@ -65,24 +65,24 @@ public class RemindMe implements CommandIntrf {
 
         //Формирование ответа после сохранения сообщения
         String[] responseWordsTimes = {" Years, ", " Months, ", " Days, \n", " Hours, ", " Min's.\n"};
-        String[] responseLitersTimes = {year, month, day, hour, minute};
         StringBuilder finalResponse = new StringBuilder();
         for (int i = 0; i < responseWordsTimes.length; i++) {
-            finalResponse.append(deltaTimeMap.get(responseLitersTimes[i]) != 0 ? deltaTimeMap.get(responseLitersTimes[i]) + responseWordsTimes[i] : "");
+            finalResponse.append(deltaTimeMap.getOrDefault(responseLitersTimes[i], 0) != 0 ? deltaTimeMap.getOrDefault(responseLitersTimes[i], 0) + responseWordsTimes[i] : "");
         } //если значение == 0, оно не упоминается в ответе
         return "Successfully saved and will be sent via: " + finalResponse + "~ 1-2 minutes before";
     }
 
     private Map<String, Integer> identifyTime(String messageText) {
-        String year = "y", month = "m", day = "d", hour = "h", minute = "min";
-        Map<String, Integer> dictRezult = new HashMap<>(Map.of(year, 0, month, 0, day, 0, hour, 0, minute, 0));
+        // формат будет такой например "/Remind_Me (1y 1m 1d 3h 1min) text text text"
+        //Если год, месяц и тд не нужны их не указывают
+        //например "/Remind_Me (2h 1min) text" - через 2 часа 1 минуту
+        Map<String, Integer> dictRezult = new HashMap<>();
 
         if (!messageText.contains("(") && !messageText.contains(")")) return dictRezult;
 
         String dateTime = messageText.substring(messageText.indexOf("(") + 1, messageText.indexOf(")")).toLowerCase();
         String[] massiveToParse = dateTime.split(" ");  //{"1y", "1m", "1d", "1h", "1min"}
-        System.out.println(dateTime);
-        for (String letter : dictRezult.keySet()) {
+        for (String letter : responseLitersTimes) {
             for (String word : massiveToParse) {
                 if (word.contains(letter)) {
                     String cifr = word.replaceAll(letter, "");
