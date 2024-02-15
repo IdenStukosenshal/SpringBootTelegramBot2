@@ -30,15 +30,13 @@ public class MainService extends TelegramLongPollingBot {
     private final BotConfig botConfig;
     private final CommandProcessing commandProcessing;
     private final CallBackProcessing callBackProcessing;
-    private final ReminderMsgRepo reminderMsgRepo;
 
     @Autowired
-    public MainService(BotConfig botConfig, CallBackProcessing callBackProcessing, CommandProcessing commandProcessing, ReminderMsgRepo reminderMsgRepo) {
+    public MainService(BotConfig botConfig, CallBackProcessing callBackProcessing, CommandProcessing commandProcessing) {
         super(botConfig.getToken());
         this.botConfig = botConfig;
         this.commandProcessing = commandProcessing;
         this.callBackProcessing = callBackProcessing;
-        this.reminderMsgRepo = reminderMsgRepo;
 
         setCommandList();
     }
@@ -76,33 +74,8 @@ public class MainService extends TelegramLongPollingBot {
         }
     }
 
-    /*Метод осуществляет проверку списка сообщений через некоторый промежуток времени.
-Если подошло время отправить - он это делает
-    Если список будет очень большим ВОЗМОЖНО всё перестанет работать
- */
-    @Scheduled(cron = "0 * * * * *") // 0 *...* каждую минуту
-    //секунды, минуты, часы, дата(номер дня), месяц, день недели
-    //* любое значение, 6 звёзд: каждую секунду, 0 0 *...: каждый час в 00:00
-    private void checkToSend() {
-        Iterable<ReminderMessage> allMsgList = reminderMsgRepo.findAll();
-        LocalDateTime ldatetimeNow = LocalDateTime.now();
-
-        for (ReminderMessage savedMsg : allMsgList) {
-            LocalDateTime ldatetimeSAVed = savedMsg.getTimeToRemind();
-            //Класс Duration для хранения длительности, промежутка
-            //https://stackoverflow.com/questions/24491243/why-cant-i-get-a-duration-in-minutes-or-hours-in-java-time
-            if (Duration.between(ldatetimeNow, ldatetimeSAVed).toMinutesPart() <= 2) { //Сообщение отправится примерно за 2 минуты до
-                SendMessage message = new SendMessage();
-                message.setChatId(savedMsg.getUserId());
-                message.setText(savedMsg.getText() + "\nhas been saved: " + "\n" + savedMsg.getCreatedAt());
-                simpleSendMessage(message); //отправка сообщения
-                reminderMsgRepo.deleteById(savedMsg.getId()); //удаление сообщения из БД
-            }
-        }
-    }
-
+    //меню списка команд, нельзя использовать верхний регистр
     private void setCommandList() {
-        //меню списка команд, нельзя использовать верхний регистр
         List<BotCommand> listCommands = new ArrayList<>(Arrays.asList(
                 new BotCommand(CommandsStorage.START.getText(), "Start working"),
                 new BotCommand(CommandsStorage.DELETE_LAST_REMINDER.getText(), "delete last reminder_me message"),
