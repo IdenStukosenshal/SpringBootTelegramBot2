@@ -1,7 +1,9 @@
 package javaTgBot_2.config;
 
 public enum ConstantsStorage {
-    ERROR_TEXT("Message NOT sent, Error: "), START_TXT("PLACEHOLDER FOR /start"),
+    ERROR_TEXT("Message NOT sent, Error: "), START_TXT("Этот бот написан на Java Spring Boot, \n"
+            + "С его помощью можно:\n* узнать курсы некоторых валют и\n"
+            + "* Оставить напоминание, которое придёт через указанное время"),
     HELP_TXT("type /start to start\n type /help to help\n type /remind_me to set remind message\n"
             + "type /exchange_rates to find out the exchange rates of some currencies\n"
             + "type /delete_last_reminder to delete the last reminder\n"

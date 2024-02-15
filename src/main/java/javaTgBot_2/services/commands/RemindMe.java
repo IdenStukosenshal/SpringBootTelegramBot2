@@ -16,12 +16,14 @@ import java.util.Map;
 public class RemindMe implements CommandIntrf {
 
     private final ReminderMsgRepo reminderMsgRepo;
+    private final StartComm startComm;
 
     private final String year = "y", month = "m", day = "d", hour = "h", minute = "min";
     private final String[] responseLitersTimes = {year, month, day, hour, minute};
 
-    public RemindMe(ReminderMsgRepo reminderMsgRepo) {
+    public RemindMe(ReminderMsgRepo reminderMsgRepo, StartComm startComm) {
         this.reminderMsgRepo = reminderMsgRepo;
+        this.startComm = startComm;
     }
 
     @Override
@@ -44,7 +46,7 @@ public class RemindMe implements CommandIntrf {
     }
 
     private String saveRemindMessage(Update update) {
-
+        startComm.registerUser(update);
 
         Long userId = update.getMessage().getChatId();
         String messageText = update.getMessage().getText();

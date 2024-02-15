@@ -52,8 +52,8 @@ public class StartComm implements CommandIntrf {
         return CommandsStorage.START;
     }
 
-    //Создание записи в таблице для пользователя, если её нет
-    private void registerUser(Update update) {
+    //Создание записи в таблице для пользователя, если её нет, пока этот функционал не используется
+    public void registerUser(Update update) {
         var message = update.getMessage();
         Long chatId = message.getChatId();
         if (!userRepo.existsById(chatId)) { //если записи не существует
