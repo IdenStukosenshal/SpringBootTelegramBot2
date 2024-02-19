@@ -33,7 +33,7 @@ public class GetExchangeRates {
         String sellAmount = currencyPairSell.getData().amount();
         String sellResponse = "sell: " + baseCoinCode + "/" + toCoinCode + " : " + sellAmount;
 
-        var allPricesVal = allRateProxyIntrf.getAllPrices(baseCoinCode).getData();
+        var allPricesVal = allRateProxyIntrf.getAllPrices(baseCoinCode).getData(); //record
         String allAmount = allPricesVal.rates().get(toCoinCode);
         String Allresponse = baseCoinCode + "/" + toCoinCode + ": " + allAmount;
 

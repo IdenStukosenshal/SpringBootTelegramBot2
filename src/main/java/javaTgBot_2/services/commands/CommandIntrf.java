@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
  * Интерфейс, который должны реализовать все классы начальных команд
- * типа /start, /help и тд.
+ * типа /start, /help, /remind_me и тд.
  */
 public interface CommandIntrf {
     SendMessage respond(Update update);

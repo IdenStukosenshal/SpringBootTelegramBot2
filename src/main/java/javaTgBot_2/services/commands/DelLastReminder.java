@@ -18,7 +18,7 @@ public class DelLastReminder implements CommandIntrf {
     @Override
     public SendMessage respond(Update update) {
         long chatId = update.getMessage().getChatId();
-        if (reminderMsgRepo.findFirstByUserIdOrderByCreatedAtDesc(chatId).isPresent()) {
+        if (reminderMsgRepo.findFirstByUserIdOrderByCreatedAtDesc(chatId).isPresent()) { //можно было применить .orElseGet()
             var savedMsg = reminderMsgRepo.findFirstByUserIdOrderByCreatedAtDesc(chatId).get();
             String text = "Message with:\n" + savedMsg.getText()
                     + "\ndate created: " + savedMsg.getCreatedAt()

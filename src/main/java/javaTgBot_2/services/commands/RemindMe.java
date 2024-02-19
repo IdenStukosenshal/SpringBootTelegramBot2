@@ -60,7 +60,10 @@ public class RemindMe implements CommandIntrf {
                 .plusHours(deltaTimeMap.getOrDefault(hour, 0))
                 .plusMinutes(deltaTimeMap.getOrDefault(minute, 0));
 
-        String reminderText = "text:\n" + messageText.substring(messageText.indexOf(")") + 1) + "\n";
+        String reminderText = "text:\n";
+        if (messageText.contains(")")) { //если формат правильный, то текст после скобочки, если нет, то после первого пробела
+            reminderText += messageText.substring(messageText.indexOf(")") + 1) + "\n";
+        } else reminderText += messageText.substring(messageText.indexOf(" ") + 1) + "\n";
 
         ReminderMessage reminderMessage = new ReminderMessage(null, userId, reminderText, futureTime, ldatetimeNow);
         reminderMsgRepo.save(reminderMessage);//Сохранить в БД
@@ -69,18 +72,18 @@ public class RemindMe implements CommandIntrf {
         String[] responseWordsTimes = {" Years, ", " Months, ", " Days, \n", " Hours, ", " Min's.\n"};
         StringBuilder finalResponse = new StringBuilder();
         for (int i = 0; i < responseWordsTimes.length; i++) {
-            finalResponse.append(deltaTimeMap.getOrDefault(responseLitersTimes[i], 0) != 0 ? deltaTimeMap.getOrDefault(responseLitersTimes[i], 0) + responseWordsTimes[i] : "");
+            finalResponse.append(deltaTimeMap.getOrDefault(responseLitersTimes[i], 0) != 0 ? deltaTimeMap.get(responseLitersTimes[i]) + responseWordsTimes[i] : "");
         } //если значение == 0, оно не упоминается в ответе
         return "Successfully saved and will be sent via: " + finalResponse + "~ 1-2 minutes before";
     }
 
     private Map<String, Integer> identifyTime(String messageText) {
         // формат будет такой например "/Remind_Me (1y 1m 1d 3h 1min) text text text"
-        //Если год, месяц и тд не нужны их не указывают
+        //Если год, месяц и тд не нужны их не указывают, если указано несколько раз - учитывается только первый
         //например "/Remind_Me (2h 1min) text" - через 2 часа 1 минуту
         Map<String, Integer> dictRezult = new HashMap<>();
 
-        if (!messageText.contains("(") && !messageText.contains(")")) return dictRezult;
+        if (!messageText.contains("(") || !messageText.contains(")")) return dictRezult;
 
         String dateTime = messageText.substring(messageText.indexOf("(") + 1, messageText.indexOf(")")).toLowerCase();
         String[] massiveToParse = dateTime.split(" ");  //{"1y", "1m", "1d", "1h", "1min"}
