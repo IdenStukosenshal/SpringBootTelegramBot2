@@ -3,6 +3,7 @@
 
 Для работы с ботом нужно написать BotFather в telegram, создать бота, назначив имя
 и получив API Token. Указать их в application.properties.
+Создать базу данных MySQL, прописать логин и пароль в application.properties.
 
 Функции:
 * посмотреть курсы валют(обращение к API сайта, использование OpenFeign),

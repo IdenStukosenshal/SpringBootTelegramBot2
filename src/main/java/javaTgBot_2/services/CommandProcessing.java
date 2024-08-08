@@ -21,7 +21,7 @@ public class CommandProcessing {
         }
      */
     //автоматическое добавление классов, которые реализуют этот интерфейс,
-    //Но каждая команда(класс) должна быть бином
+    //Но каждая команда(класс) должна быть бином, Autowiring
     public CommandProcessing(List<CommandIntrf> commandsObj) {
         Map<String, CommandIntrf> tmpDict = new HashMap<>();
         for (CommandIntrf commObj : commandsObj) {
