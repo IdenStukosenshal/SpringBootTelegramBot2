@@ -1,8 +1,7 @@
 package javaTgBot_2.config;
 
-
+import org.slf4j.Logger;
 import javaTgBot_2.services.MainService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -12,12 +11,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 /*
- добавляет
  private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(BotInitializer.class);
 */
-@Slf4j
+
 @Component
 public class BotInitializer {
+
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(BotInitializer.class);
 
     private final MainService mainService;
 

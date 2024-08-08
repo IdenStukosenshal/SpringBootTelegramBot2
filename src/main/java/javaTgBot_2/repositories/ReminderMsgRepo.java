@@ -14,8 +14,8 @@ public interface ReminderMsgRepo extends CrudRepository<ReminderMessage, Long> {
     //DSL Spring Data
 
     /*
-    JPQL
-    @Query("SELECT r FROM ReminderMessage r WHERE r.userId = :userId ORDER BY r.createdAt DESC")
+        ПЕРЕДЕЛАТЬ после создания таблиц
+    @Query("SELECT ????? FROM ReminderMessage r WHERE r.userId = :userId ORDER BY r.createdAt DESC")
     Optional<ReminderMessage> findLastByUserId(@Param("userId") Long userId);
 
      */

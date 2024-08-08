@@ -3,7 +3,7 @@ package javaTgBot_2.services;
 import javaTgBot_2.config.BotConfig;
 import javaTgBot_2.config.CommandsStorage;
 import javaTgBot_2.config.ConstantsStorage;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -18,9 +18,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-@Slf4j
 @Service
 public class MainService extends TelegramLongPollingBot {
+
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(MainService.class);
 
     private final BotConfig botConfig;
     private final CommandProcessing commandProcessing;
