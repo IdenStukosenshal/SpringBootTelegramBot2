@@ -8,11 +8,10 @@ import java.util.Objects;
 
 public class ReminderMessage {
 
-    //НУЖНА автогенерация id напоминания
     @Id
     private Long id;
 
-    private Long userId;
+    private Long chatId;
 
     private String text;
 
@@ -22,9 +21,9 @@ public class ReminderMessage {
     public ReminderMessage() {
     }
 
-    public ReminderMessage(Long id, Long userId, String text, LocalDateTime timeToRemind, LocalDateTime createdAt) {
+    public ReminderMessage(Long id, Long chatId, String text, LocalDateTime timeToRemind, LocalDateTime createdAt) {
         this.id = id;
-        this.userId = userId;
+        this.chatId = chatId;
         this.text = text;
         this.timeToRemind = timeToRemind;
         this.createdAt = createdAt;
@@ -38,12 +37,12 @@ public class ReminderMessage {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getChatId() {
+        return chatId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
     }
 
     public String getText() {
@@ -74,7 +73,7 @@ public class ReminderMessage {
     public String toString() {
         return "ReminderMessage{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", userId=" + chatId +
                 ", text='" + text + '\'' +
                 ", timeToRemind=" + timeToRemind +
                 ", createdAt=" + createdAt +
@@ -87,7 +86,7 @@ public class ReminderMessage {
         if (o == null || getClass() != o.getClass()) return false;
         ReminderMessage that = (ReminderMessage) o;
         return Objects.equals(getId(), that.getId())
-                && Objects.equals(getUserId(), that.getUserId())
+                && Objects.equals(getChatId(), that.getChatId())
                 && Objects.equals(getText(), that.getText())
                 && Objects.equals(getTimeToRemind(), that.getTimeToRemind())
                 && Objects.equals(getCreatedAt(), that.getCreatedAt());
@@ -95,6 +94,6 @@ public class ReminderMessage {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUserId(), getText(), getTimeToRemind(), getCreatedAt());
+        return Objects.hash(getId(), getChatId(), getText(), getTimeToRemind(), getCreatedAt());
     }
 }

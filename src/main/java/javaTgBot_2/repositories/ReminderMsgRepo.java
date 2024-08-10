@@ -1,6 +1,7 @@
 package javaTgBot_2.repositories;
 
 import javaTgBot_2.models.ReminderMessage;
+import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
@@ -8,15 +9,16 @@ import java.util.Optional;
 public interface ReminderMsgRepo extends CrudRepository<ReminderMessage, Long> {
 
 
-    Optional<ReminderMessage> findFirstByUserIdOrderByCreatedAtDesc(Long userId);
     //Метод вернет самое последнее сообщение для данного пользователя
-    //Spring интерпретирует имя метода как SQL запрос
-    //DSL Spring Data
+    @Query("SELECT *" +
+           "  FROM reminder_message " +
+            "WHERE chat_id = :chatId AND created_at = (SELECT MAX(created_at) FROM reminder_message WHERE chat_id = :chatId)")
+    Optional<ReminderMessage> findLastByUserId(Long chatId);
+
 
     /*
-        ПЕРЕДЕЛАТЬ после создания таблиц
-    @Query("SELECT ????? FROM ReminderMessage r WHERE r.userId = :userId ORDER BY r.createdAt DESC")
-    Optional<ReminderMessage> findLastByUserId(@Param("userId") Long userId);
-
+    SELECT *
+      FROM reminder_msg
+     WHERE chatId = :chatId AND created_at = (SELECT MAX(created_at) FROM reminder_msg WHERE chatId = :chatId)
      */
 }

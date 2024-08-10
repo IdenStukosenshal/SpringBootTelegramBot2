@@ -59,8 +59,11 @@ public class StartComm implements CommandIntrf {
         if (!userRepo.existsById(chatId)) { //если записи не существует
             String firstname = message.getChat().getFirstName();
             String username = message.getChat().getUserName();
-            UserT userT = new UserT(chatId, firstname, username, LocalDateTime.now());
-            userRepo.save(userT);
+            userRepo.saveUser(chatId, firstname, username);
+            /*
+            Метод userRepo.save(userT) существует, но вызывает ошибку
+            Failed to update entity, Id not found in database
+            */
         }
     }
 }

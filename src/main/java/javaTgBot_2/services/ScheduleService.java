@@ -36,7 +36,7 @@ public class ScheduleService {
             //https://stackoverflow.com/questions/24491243/why-cant-i-get-a-duration-in-minutes-or-hours-in-java-time
             if (Duration.between(ldatetimeNow, ldatetimeSAVed).toMinutesPart() <= 2) { //Сообщение отправится примерно за 2 минуты до
                 SendMessage message = new SendMessage();
-                message.setChatId(savedMsg.getUserId());
+                message.setChatId(savedMsg.getChatId());
                 message.setText(savedMsg.getText() + "\nhas been saved: " + "\n" + savedMsg.getCreatedAt());
                 mainService.simpleSendMessage(message); //отправка сообщения
                 reminderMsgRepo.deleteById(savedMsg.getId()); //удаление сообщения из БД
