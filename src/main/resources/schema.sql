@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS user_t(
 chat_id int NOT NULL,
 first_name varchar(50) DEFAULT 'UNKNOWN',
-user_name varchar(50) DEFAULT 'UNKNOWN',
+user_name varchar(50),
 registered_at datetime DEFAULT CURRENT_TIMESTAMP,
 CONSTRAINT pk_id PRIMARY KEY (chat_id)
 );

@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Component
 public class ScheduleService {
@@ -27,13 +28,11 @@ public class ScheduleService {
     //секунды, минуты, часы, дата(номер дня), месяц, день недели
     //* любое значение, 6 звёзд: каждую секунду, 0 0 *...: каждый час в 00:00
     private void checkToSend() {
-        Iterable<ReminderMessage> allMsgList = reminderMsgRepo.findAll();
+        List<ReminderMessage> allMsgList = reminderMsgRepo.findAllReadyMsg();
         LocalDateTime ldatetimeNow = LocalDateTime.now();
 
         for (ReminderMessage savedMsg : allMsgList) {
             LocalDateTime ldatetimeSAVed = savedMsg.getTimeToRemind();
-            //Класс Duration для хранения длительности, промежутка
-            //https://stackoverflow.com/questions/24491243/why-cant-i-get-a-duration-in-minutes-or-hours-in-java-time
             if (Duration.between(ldatetimeNow, ldatetimeSAVed).toMinutesPart() <= 2) { //Сообщение отправится примерно за 2 минуты до
                 SendMessage message = new SendMessage();
                 message.setChatId(savedMsg.getChatId());
@@ -43,4 +42,7 @@ public class ScheduleService {
             }
         }
     }
+
+    //Класс Duration для хранения длительности, промежутка
+    //https://stackoverflow.com/questions/24491243/why-cant-i-get-a-duration-in-minutes-or-hours-in-java-time
 }
