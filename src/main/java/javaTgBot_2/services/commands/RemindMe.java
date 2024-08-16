@@ -85,8 +85,8 @@ public class RemindMe implements CommandIntrf {
 
         if (!messageText.contains("(") || !messageText.contains(")")) return dictRezult;
 
-        String dateTime = messageText.substring(messageText.indexOf("(") + 1, messageText.indexOf(")")).toLowerCase();
-        String[] massiveToParse = dateTime.split(" ");  //{"1y", "1m", "1d", "1h", "1min"}
+        String dateTimeStr = messageText.substring(messageText.indexOf("(") + 1, messageText.indexOf(")")).toLowerCase();
+        String[] massiveToParse = dateTimeStr.split(" ");  //{"1y", "1m", "1d", "1h", "1min"}
         for (String letter : responseLitersTimes) {
             for (String word : massiveToParse) {
                 if (word.contains(letter)) {
