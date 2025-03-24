@@ -10,13 +10,13 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableFeignClients(basePackages = "javaTgBot_2.proxy")
 public class BotConfig {
 
-    @Value("${bot.name}")
+    @Value("${BOT_NAME}")
     private String botName;
 
-    @Value("${bot.token}")
+    @Value("${BOT_TOKEN}")
     private String token;
 
-    @Value("${bot.owner}")
+    @Value("${BOT_OWNER}")
     private Long ownerId;
 
     public String getBotName() {
