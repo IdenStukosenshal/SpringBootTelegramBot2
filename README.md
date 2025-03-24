@@ -24,7 +24,7 @@ docker network create networkName
 ```
 docker run -d --name mysqlContainerName --network networkName -e MYSQL_ROOT_PASSWORD=rootPassword -e MYSQL_DATABASE=dbName -e MYSQL_USER=dbUserName -e MYSQL_PASSWORD=password mysql
 ```
-* запустить контейнер с приложением, указав переменные окружения:
+* запустить контейнер с приложением, указав переменные окружения:  
 Пример:  
 ```
 docker run -d --name j-bot --network networkName -e SPRING_DATASOURCE_URL=jdbc:mysql://mysqlContainerName:3306/dbName -e SPRING_DATASOURCE_USERNAME=dbUserName -e SPRING_DATASOURCE_PASSWORD=password -e BOT_NAME=YourBotName -e BOT_TOKEN=YourToken -e BOT_OWNER=YourID botImageName
